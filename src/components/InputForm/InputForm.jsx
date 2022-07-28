@@ -9,7 +9,14 @@ const InputForm = () => {
 
   const [inputName, setInputName] = useState('');
   const [inputPhone, setInputPhone] = useState('');
-  const notes = useSelector(({ contacts: { items } }) => items);
+  const notes = useSelector(
+    ({
+      noteReducer: {
+        contacts: { items },
+      },
+    }) => items
+  );
+
   const dispatch = useDispatch();
 
   // Handle functions
@@ -44,8 +51,7 @@ const InputForm = () => {
     phone: inputPhone,
   });
 
-  const checkUsers = data =>
-    notes.find(({ name }) => name.toLowerCase() === data.name.toLowerCase());
+  const checkUsers = data => notes.find(({ name }) => name.toLowerCase() === data.name.toLowerCase());
 
   return (
     <MyForm onSubmit={handleSubmitForm}>

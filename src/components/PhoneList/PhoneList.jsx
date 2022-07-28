@@ -4,16 +4,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteNote } from 'Redux/Action/actions';
 
 function PhoneList() {
-  const notes = useSelector(({ contacts: { items } }) => items);
-  const filter = useSelector(({ contacts: { filter } }) => filter);
+  const notes = useSelector(
+    ({
+      noteReducer: {
+        contacts: { items },
+      },
+    }) => items
+  );
+
+  const filter = useSelector(
+    ({
+      noteReducer: {
+        contacts: { filter },
+      },
+    }) => filter
+  );
+
   const dispatch = useDispatch();
 
   const deleteUser = deletedId => {
     dispatch(deleteNote(deletedId));
   };
 
-  const filterUsers = () =>
-    notes.filter(item => item.name.toLowerCase().includes(filter));
+  const filterUsers = () => notes.filter(item => item.name.toLowerCase().includes(filter));
 
   return (
     <Container>

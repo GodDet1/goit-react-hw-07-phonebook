@@ -1,7 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { addNote, changeFilter, deleteNote } from '../Action/actions';
 
-const noteReducer = createReducer(0, {
+const preloadedState = {
+  contacts: {
+    items: [],
+    filter: '',
+  },
+};
+
+const noteReducer = createReducer(preloadedState, {
   [addNote]: (state, action) => ({
     ...state,
     contacts: {

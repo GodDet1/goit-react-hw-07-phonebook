@@ -3,7 +3,13 @@ import { changeFilter } from 'Redux/Action/actions';
 import { Container, MyInput, MyP } from './styled';
 
 function Filter() {
-  const filter = useSelector(({ contacts: { filter } }) => filter);
+  const filter = useSelector(
+    ({
+      noteReducer: {
+        contacts: { filter },
+      },
+    }) => filter
+  );
   const dispatch = useDispatch();
   const handleFilter = e =>
     dispatch(changeFilter(e.currentTarget.value.toLowerCase()));
