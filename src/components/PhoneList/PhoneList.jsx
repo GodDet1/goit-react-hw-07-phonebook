@@ -1,16 +1,12 @@
 import React from 'react';
 import { Container, List, ListItem, MyBtn } from './styled';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteNote } from 'Redux/Action/actions';
+import { useSelector } from 'react-redux';
+import { useDeleteDataMutation, useGetDataQuery } from 'Redux/API/API';
+import { Bars } from 'react-loader-spinner';
 
 function PhoneList() {
-  const notes = useSelector(
-    ({
-      noteReducer: {
-        contacts: { items },
-      },
-    }) => items
-  );
+  const { data, isFetching, isSuccess } = useGetDataQuery();
+  const [deleteData] = useDeleteDataMutation();
 
   const filter = useSelector(
     ({
@@ -20,26 +16,29 @@ function PhoneList() {
     }) => filter
   );
 
-  const dispatch = useDispatch();
-
-  const deleteUser = deletedId => {
-    dispatch(deleteNote(deletedId));
-  };
-
-  const filterUsers = () => notes.filter(item => item.name.toLowerCase().includes(filter));
+  const filterUsers = () => data.filter(item => item.name.toLowerCase().includes(filter));
 
   return (
     <Container>
-      {filterUsers().length === 0 ? (
-        <p>There is no user</p>
-      ) : (
+      {isFetching && (
+        <Bars
+          color="#acacac"
+          wrapperStyle={{
+            justifyContent: 'center',
+          }}
+        />
+      )}
+
+      {isSuccess && filterUsers().length === 0 && <p> There is no user</p>}
+
+      {isSuccess && (
         <List>
           {filterUsers().map(item => (
             <ListItem key={item.id}>
               <p>
                 {item.name}: {item.phone}
               </p>
-              <MyBtn type="button" onClick={() => deleteUser(item.id)}>
+              <MyBtn type="button" onClick={() => deleteData(item.id)}>
                 x
               </MyBtn>
             </ListItem>

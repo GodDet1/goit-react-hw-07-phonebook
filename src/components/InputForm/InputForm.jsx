@@ -1,23 +1,13 @@
 import { useState } from 'react';
 import { MyForm, MyInput } from './styled';
-import { nanoid } from 'nanoid';
-import { useDispatch, useSelector } from 'react-redux';
-import { addNote } from 'Redux/Action/actions';
+import { useGetDataQuery, usePostDataMutation } from 'Redux/API/API';
 
 const InputForm = () => {
   // Hooks
-
+  const { data } = useGetDataQuery();
+  const [setData] = usePostDataMutation();
   const [inputName, setInputName] = useState('');
   const [inputPhone, setInputPhone] = useState('');
-  const notes = useSelector(
-    ({
-      noteReducer: {
-        contacts: { items },
-      },
-    }) => items
-  );
-
-  const dispatch = useDispatch();
 
   // Handle functions
 
@@ -33,7 +23,7 @@ const InputForm = () => {
       return false;
     }
 
-    dispatch(addNote(data));
+    setData(data);
 
     if (data) {
       setInputName('');
@@ -46,12 +36,11 @@ const InputForm = () => {
   // Helpers
 
   const newData = () => ({
-    id: nanoid(),
     name: inputName,
     phone: inputPhone,
   });
 
-  const checkUsers = data => notes.find(({ name }) => name.toLowerCase() === data.name.toLowerCase());
+  const checkUsers = phone => data.find(({ name }) => name.toLowerCase() === phone.name.toLowerCase());
 
   return (
     <MyForm onSubmit={handleSubmitForm}>
